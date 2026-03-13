@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "api-cost-tracker"
+version = "0.1.0"
+description = "Track, cache, and analyze Claude API costs"
+requires-python = ">=3.10"
+dependencies = [
+    "anthropic>=0.25.0",
+    "diskcache>=5.6.0",
+]
+
+[project.scripts]
+costs = "api_cost_tracker.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.optional-dependencies]
+dev = ["pytest", "pytest-mock", "pytest-cov"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
