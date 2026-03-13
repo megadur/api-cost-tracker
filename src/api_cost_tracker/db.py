@@ -23,6 +23,7 @@ def init_db():
                 timestamp        TEXT    NOT NULL,
                 prompt_preview   TEXT,
                 complexity       TEXT,
+                provider         TEXT,
                 model_used       TEXT,
                 input_tokens     INTEGER,
                 output_tokens    INTEGER,
@@ -33,3 +34,7 @@ def init_db():
                 response_preview TEXT
             )
         """)
+        # migrate existing DBs that don't have the provider column
+        cols = [r[1] for r in conn.execute("PRAGMA table_info(requests)").fetchall()]
+        if "provider" not in cols:
+            conn.execute("ALTER TABLE requests ADD COLUMN provider TEXT DEFAULT 'claude'")

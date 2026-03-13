@@ -29,7 +29,8 @@ def cmd_summary(args):
     print(f"  Tokens     : {t['input_tokens'] or 0} in / {t['output_tokens'] or 0} out")
     print(f"  Cache hits : {t['cache_hits']}\n  By model:")
     for m in s["by_model"]:
-        print(f"    {m['model_used']:<38} {fmt(m['cost'])} ({m['calls']} calls)")
+        tag = "(subscription)" if m["provider"] == "gemini" else fmt(m["cost"])
+        print(f"    [{m['provider']:<6}] {m['model_used']:<32} {tag} ({m['calls']} calls)")
     print(f"{'='*50}\n")
 
 def cmd_daily(args):
@@ -65,10 +66,11 @@ def cmd_models(args):
     s     = get_summary(since)
     label = f"last {args.period}" if args.period else "all time"
     print(f"\n  Model breakdown ({label}):\n")
-    print(f"  {'MODEL':<38} {'CALLS':>6} {'AVG':>10} {'TOTAL':>12}")
-    print(f"  {'-'*68}")
+    print(f"  {'PROVIDER':<8} {'MODEL':<32} {'CALLS':>6} {'TOKENS IN':>10} {'TOKENS OUT':>11} {'TOTAL':>12}")
+    print(f"  {'-'*82}")
     for m in s["by_model"]:
-        print(f"  {m['model_used']:<38} {m['calls']:>6} {fmt(m['avg_cost']):>10} {fmt(m['cost']):>12}")
+        total = "(subscription)" if m["provider"] == "gemini" else fmt(m["cost"])
+        print(f"  {m['provider']:<8} {m['model_used']:<32} {m['calls']:>6} {m['input_tokens']:>10} {m['output_tokens']:>11} {total:>12}")
     print()
 
 def cmd_export(args):
