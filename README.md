@@ -23,7 +23,20 @@ Track, cache, and analyze Claude and Gemini API costs from the terminal.
 ```bash
 git clone https://github.com/megadur/api-cost-tracker.git
 cd api-cost-tracker
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -e .
+```
+
+> **Note:** A virtual environment is required on Debian/Ubuntu systems (Python is externally managed).
+
+### Optional: global `costs` command
+
+To use `costs` from anywhere without activating the venv each time:
+
+```bash
+echo 'alias costs="/path/to/api-cost-tracker/.venv/bin/costs"' >> ~/.bashrc
+source ~/.bashrc
 ```
 
 ## Setup
@@ -101,6 +114,8 @@ All data is stored locally at `~/.api_cost_tracker/`:
 ## Development
 
 ```bash
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -e ".[dev]"
 pytest
 pytest --cov=api_cost_tracker --cov-report=term-missing
